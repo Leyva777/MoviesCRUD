@@ -1,0 +1,182 @@
+<!-- interfaz de pelis y directores -->
+<div class="app-container">
+  <header class="navbar">
+    <div class="brand">
+      <h1>Cinema Management System</h1>
+      <span class="sub-brand">Panel de Administracion CRUD</span>
+    </div>
+    <nav class="nav-tabs">
+      <button type="button" class="tab-btn" [class.active]="tab === 'directores'" (click)="setTab('directores')">
+        Directores
+      </button>
+      <button type="button" class="tab-btn" [class.active]="tab === 'movies'" (click)="setTab('movies')">
+        Peliculas
+      </button>
+    </nav>
+  </header>
+
+  <main class="content-area">
+    <!-- seccion directores -->
+    <div *ngIf="tab === 'directores'" class="crud-section">
+      <div class="card form-card">
+        <h2>{{ esEditDirector ? 'Editar Director' : 'Nuevo Director' }}</h2>
+        <form (ngSubmit)="guardarDirector()" class="crud-form">
+          <div class="form-group" *ngIf="esEditDirector">
+            <label>ID Director</label>
+            <input type="number" [(ngModel)]="directorForm.pkDirector" name="pkDirector" readonly
+              class="input-field readonly" />
+          </div>
+
+          <div class="form-group">
+            <label>Nombre Completo</label>
+            <input type="text" [(ngModel)]="directorForm.name" name="name" required placeholder=""
+              class="input-field" />
+          </div>
+
+          <div class="form-group">
+            <label>Edad</label>
+            <input type="number" [(ngModel)]="directorForm.age" name="age" required placeholder=""
+              class="input-field" />
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="directorForm.active" name="active" />
+              <span>Director Activo</span>
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+              {{ esEditDirector ? 'Guardar Cambios' : 'Registrar Director' }}
+            </button>
+            <button type="button" *ngIf="esEditDirector" (click)="limpiarDirector()" class="btn btn-secondary">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card table-card">
+        <h2>Listado de Directores</h2>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th>Estatus</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let d of directores">
+                <td>#{{ d.pkDirector }}</td>
+                <td class="font-bold">{{ d.name }}</td>
+                <td>{{ d.age }} años</td>
+                <td>
+                  <span class="badge" [class.badge-active]="d.active" [class.badge-inactive]="!d.active">
+                    {{ d.active ? 'Activo' : 'Inactivo' }}
+                  </span>
+                </td>
+                <td class="actions-cell">
+                  <button type="button" (click)="seleccionarDirector(d)" class="btn-icon btn-edit" title="Editar">Editar</button>
+                  <button type="button" (click)="borrarDirector(d.pkDirector)" class="btn-icon btn-delete"
+                    title="Eliminar">Borrar</button>
+                </td>
+              </tr>
+              <tr *ngIf="directores.length === 0">
+                <td colspan="5" class="empty-msg">No hay directores registrados en la base de datos.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- seccion peliculas -->
+    <div *ngIf="tab === 'movies'" class="crud-section">
+      <div class="card form-card">
+        <h2>{{ esEditMovie ? 'Editar Pelicula' : 'Nueva Pelicula' }}</h2>
+        <form (ngSubmit)="guardarMovie()" class="crud-form">
+          <div class="form-group" *ngIf="esEditMovie">
+            <label>ID Pelicula</label>
+            <input type="number" [(ngModel)]="movieForm.pkMovies" name="pkMovies" readonly
+              class="input-field readonly" />
+          </div>
+
+          <div class="form-group">
+            <label>Nombre de la Pelicula</label>
+            <input type="text" [(ngModel)]="movieForm.name" name="name" required placeholder="" class="input-field" />
+          </div>
+
+          <div class="form-group">
+            <label>Genero</label>
+            <input type="text" [(ngModel)]="movieForm.gender" name="gender" required placeholder=""
+              class="input-field" />
+          </div>
+
+          <div class="form-group">
+            <label>Duracion (HH:MM:SS)</label>
+            <input type="text" [(ngModel)]="movieForm.duration" name="duration" placeholder="02:28:00"
+              class="input-field" />
+          </div>
+
+          <div class="form-group">
+            <label>Director Asignado</label>
+            <select [(ngModel)]="movieForm.fkDirector" name="fkDirector" class="input-field">
+              <option [ngValue]="0">-- Seleccionar Director --</option>
+              <option *ngFor="let d of directores" [ngValue]="d.pkDirector">
+                {{ d.name }} (#{{ d.pkDirector }})
+              </option>
+            </select>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+              {{ esEditMovie ? 'Guardar Cambios' : 'Registrar Pelicula' }}
+            </button>
+            <button type="button" *ngIf="esEditMovie" (click)="limpiarMovie()" class="btn btn-secondary">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card table-card">
+        <h2>Listado de Peliculas</h2>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Genero</th>
+                <th>Duracion</th>
+                <th>Director</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let m of movies">
+                <td>#{{ m.pkMovies }}</td>
+                <td class="font-bold">{{ m.name }}</td>
+                <td><span class="genre-pill">{{ m.gender }}</span></td>
+                <td>{{ m.duration }}</td>
+                <td>{{ getNombreDirector(m.fkDirector) }}</td>
+                <td class="actions-cell">
+                  <button type="button" (click)="seleccionarMovie(m)" class="btn-icon btn-edit" title="Editar">Editar</button>
+                  <button type="button" (click)="borrarMovie(m.pkMovies)" class="btn-icon btn-delete" title="Eliminar">Borrar</button>
+                </td>
+              </tr>
+              <tr *ngIf="movies.length === 0">
+                <td colspan="6" class="empty-msg">No hay peliculas registradas en la base de datos.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

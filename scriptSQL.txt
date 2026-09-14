@@ -1,0 +1,21 @@
+-- 1.
+CREATE TABLE Director (
+    PKDirector integer NOT NULL PRIMARY KEY,
+    Name varchar(100),
+    Age integer,
+    Active boolean 
+);
+
+-- 2. 
+CREATE TABLE Movies (
+    PKMovies integer NOT NULL PRIMARY KEY,
+    Name varchar(100), 
+    Gender varchar(50),
+    Duration time, 
+    FKDirector integer
+);
+
+-- 3. 
+ALTER TABLE Movies
+ADD CONSTRAINT FK_Movies_Director 
+FOREIGN KEY (FKDirector) REFERENCES Director(PKDirector);
