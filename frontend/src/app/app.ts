@@ -48,7 +48,7 @@ export class App implements OnInit {
     private directorService: DirectorService,
     private movieService: MovieService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit() {
     // carga los datos al iniciar
@@ -62,7 +62,7 @@ export class App implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // jala directores
+  // trae directores
   obtenerDirectores() {
     this.directorService.getDirectores().subscribe({
       next: (data) => {
@@ -128,7 +128,7 @@ export class App implements OnInit {
         },
         error: (err) => {
           console.error('error al eliminar director', err);
-          // aunque haya error o 404 por desfasamiento, se refresca la vista
+          // aunque haya error o 404, se refresca la vista
           this.obtenerDirectores();
           this.obtenerMovies();
         }

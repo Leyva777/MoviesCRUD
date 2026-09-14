@@ -2,8 +2,8 @@
 <div class="app-container">
   <header class="navbar">
     <div class="brand">
-      <h1>Cinema Management System</h1>
-      <span class="sub-brand">Panel de Administracion CRUD</span>
+      <h1>Jabil's Cinema Database</h1>
+      <span class="sub-brand">Administrator system</span>
     </div>
     <nav class="nav-tabs">
       <button type="button" class="tab-btn" [class.active]="tab === 'directores'" (click)="setTab('directores')">
@@ -16,7 +16,7 @@
   </header>
 
   <main class="content-area">
-    <!-- seccion directores -->
+    <!-- directores -->
     <div *ngIf="tab === 'directores'" class="crud-section">
       <div class="card form-card">
         <h2>{{ esEditDirector ? 'Editar Director' : 'Nuevo Director' }}</h2>
@@ -81,7 +81,8 @@
                   </span>
                 </td>
                 <td class="actions-cell">
-                  <button type="button" (click)="seleccionarDirector(d)" class="btn-icon btn-edit" title="Editar">Editar</button>
+                  <button type="button" (click)="seleccionarDirector(d)" class="btn-icon btn-edit"
+                    title="Editar">Editar</button>
                   <button type="button" (click)="borrarDirector(d.pkDirector)" class="btn-icon btn-delete"
                     title="Eliminar">Borrar</button>
                 </td>
@@ -95,7 +96,7 @@
       </div>
     </div>
 
-    <!-- seccion peliculas -->
+    <!-- peliculas -->
     <div *ngIf="tab === 'movies'" class="crud-section">
       <div class="card form-card">
         <h2>{{ esEditMovie ? 'Editar Pelicula' : 'Nueva Pelicula' }}</h2>
@@ -166,8 +167,10 @@
                 <td>{{ m.duration }}</td>
                 <td>{{ getNombreDirector(m.fkDirector) }}</td>
                 <td class="actions-cell">
-                  <button type="button" (click)="seleccionarMovie(m)" class="btn-icon btn-edit" title="Editar">Editar</button>
-                  <button type="button" (click)="borrarMovie(m.pkMovies)" class="btn-icon btn-delete" title="Eliminar">Borrar</button>
+                  <button type="button" (click)="seleccionarMovie(m)" class="btn-icon btn-edit"
+                    title="Editar">Editar</button>
+                  <button type="button" (click)="borrarMovie(m.pkMovies)" class="btn-icon btn-delete"
+                    title="Eliminar">Borrar</button>
                 </td>
               </tr>
               <tr *ngIf="movies.length === 0">

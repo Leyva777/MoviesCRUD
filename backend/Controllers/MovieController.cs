@@ -64,7 +64,7 @@ public class MovieController : ControllerBase
         var anterior = await _db.Movies.FindAsync(id);
         if (anterior == null)
         {
-            return NotFound(new { message = "no se hallo la peli" });
+            return NotFound(new { message = "movie not found" });
         }
 
         if (p.FKDirector == 0)
@@ -88,11 +88,11 @@ public class MovieController : ControllerBase
         var p = await _db.Movies.FindAsync(id);
         if (p == null)
         {
-            return NotFound(new { message = "no existe" });
+            return NotFound(new { message = "record not found [movie]" });
         }
 
         _db.Movies.Remove(p);
         await _db.SaveChangesAsync();
-        return Ok(new { message = "peli borrada" });
+        return Ok(new { message = "[movie] removed" });
     }
 }

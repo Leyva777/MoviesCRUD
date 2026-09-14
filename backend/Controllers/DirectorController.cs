@@ -21,6 +21,7 @@ public class DirectorController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
+        // agarra todo
         var lista = await _db.Director.ToListAsync();
         return Ok(lista);
     }
@@ -32,7 +33,7 @@ public class DirectorController : ControllerBase
         var d = await _db.Director.FindAsync(id);
         if (d == null)
         {
-            return NotFound(new { message = "Record no encontrado" });
+            return NotFound("Record not found (id)");
         }
         return Ok(d);
     }
@@ -41,6 +42,7 @@ public class DirectorController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] Director d)
     {
+        // si no manda id calcula uno
         if (d.PKDirector == 0)
         {
             var maxId = await _db.Director.MaxAsync(x => (int?)x.PKDirector) ?? 0;
@@ -59,7 +61,7 @@ public class DirectorController : ControllerBase
         var viejo = await _db.Director.FindAsync(id);
         if (viejo == null)
         {
-            return NotFound(new { message = "Record no encontrado" });
+            return NotFound("REcord not found");
         }
 
         viejo.Name = d.Name;
@@ -70,25 +72,18 @@ public class DirectorController : ControllerBase
         return Ok(viejo);
     }
 
-    // borra el director y limpia relacion FK
+    // borra
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         var d = await _db.Director.FindAsync(id);
         if (d == null)
         {
-            return NotFound(new { message = "Record no encontrado" });
-        }
-
-        // desvincula las peliculas para que postgres no lance error de FK
-        var pelisLink = await _db.Movies.Where(m => m.FKDirector == id).ToListAsync();
-        foreach (var peli in pelisLink)
-        {
-            peli.FKDirector = null;
+            return NotFound("Record not found");
         }
 
         _db.Director.Remove(d);
         await _db.SaveChangesAsync();
-        return Ok(new { message = "eliminado ok" });
+        return Ok("eliminado ok");
     }
 }
